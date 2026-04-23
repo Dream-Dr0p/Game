@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>肉鸽回合制地牢闯关</title>
+    <style>
+        * { box-sizing: border-box; user-select: none; }
+        body {
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: system-ui, 'Segoe UI', monospace;
+        }
+        #game-container {
+            width: 1200px;
+            height: 800px;
+            background: #0f0f1a;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        canvas {
+            display: block;
+            background: #2a2a3a;
+            cursor: crosshair;
+        }
+        .ui-panel {
+            background: #1e1e2a;
+            color: #eee;
+            padding: 8px 16px;
+            display: flex;
+            gap: 20px;
+            border-top: 1px solid #3a3a4a;
+        }
+        button {
+            background: #3a3a5a;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background: #5a5a7a; }
+        #log {
+            flex: 1;
+            font-size: 12px;
+            overflow-y: auto;
+            height: 100px;
+            background: #0a0a10;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <canvas id="game-canvas" width="1200" height="600"></canvas>
+    <div class="ui-panel">
+        <div>❤️ <span id="hp">0</span> / <span id="maxHp">0</span></div>
+        <div>⚔️ <span id="atk">0</span></div>
+        <div>🏃 <span id="speed">0</span></div>
+        <div>🎒负重: <span id="weight">0</span>%</div>
+        <button id="btn-backpack">📦 背包</button>
+        <button id="btn-end-turn">⏩ 结束回合</button>
+        <div id="log"></div>
+    </div>
+</div>
+<script type="importmap">
+    {
+        "imports": {
+            "#core/*": "./src/core/*.js",
+            "#equipment/*": "./src/equipment/*.js",
+            "#battle/*": "./src/battle/*.js",
+            "#dungeon/*": "./src/dungeon/*.js",
+            "#status/*": "./src/status/*.js",
+            "#enums/*": "./src/enums/*.js"
+        }
+    }
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
