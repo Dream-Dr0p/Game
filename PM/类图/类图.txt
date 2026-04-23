@@ -1,0 +1,501 @@
+classDiagram
+    %% ==================== 角色与属性 ====================
+    class Character {
+        +string id
+        +string name
+        +int strength
+        +int agility
+        +int constitution
+        +Weapon weapon
+        +Armor[] armors
+        +Backpack backpack
+        +Dictionary~WeaponType,Skill~ skills
+        +Status[] statuses
+        +int floor
+        +int currency
+        +Dictionary~WeaponType,int~ battleSkillHits
+        +Dictionary~AttributeType,int~ adventureStartAttributes
+        +static Character createCharacter(...)
+        +equipWeapon(Weapon w)
+        +equipArmor(Armor a, int slot)
+        +takeDamage(int dmg, BodyPart part)
+        +die()
+        +gainPermanentGrowth()
+        +increaseAttribute(AttributeType attr, int amount, WeaponType weaponType = null)
+        +float getSkillExperienceBonus(WeaponType type)
+        +void addSkillExperience(WeaponType type, int baseGain)
+        +void recordAdventureStartAttributes()
+        +void calculatePermanentGrowth()
+    }
+
+    class Skill {
+        +int value
+        +int experience
+        +addExperience(int gain)
+        +getHitBonus()
+        +getWeakSpotBonus()
+        +getCritRate()
+        +getCritMultiplier()
+        +getVitalDefenseBonus()
+    }
+
+    class WeaponType {
+        <<enum>>
+        UNARMED, ONE_HANDED_SWORD, GREATSWORD, DAGGER, SPEAR, BOW, HAMMER, AXE
+    }
+
+    class AttributeType {
+        <<enum>>
+        STRENGTH, AGILITY, CONSTITUTION, WEAPON_SKILL
+    }
+
+    %% ==================== 装备与背包 ====================
+    class Weapon {
+        +string id
+        +string name
+        +WeaponType type
+        +int attack
+        +int penetrationPower
+        +float penetrationRate
+        +int range
+        +float weight
+        +WeaponSpecialAbility ability
+        +int upgradeCount
+        +upgrade(WeaponUpgradeType type)
+    }
+
+    class WeaponSpecialAbility {
+        <<interface>>
+        +void onAttack(AttackContext ctx)
+        +void onDefend(DefendContext ctx)
+    }
+
+    class DualWieldAbility {
+        +void onAttack(AttackContext ctx)
+        +void onDefend(DefendContext ctx)
+    }
+
+    class SpearPenetrateAbility {
+        +void onAttack(AttackContext ctx)
+        +void onDefend(DefendContext ctx)
+    }
+
+    class HammerSmashAbility {
+        +void onAttack(AttackContext ctx)
+        +void onDefend(DefendContext ctx)
+    }
+
+    class Armor {
+        +string id
+        +string name
+        +int defense
+        +float coverage
+        +float weight
+        +BodyPartSlot slot
+        +int upgradeCount
+        +upgrade(ArmorUpgradeType type)
+    }
+
+    class BodyPartSlot {
+        <<enum>>
+        HEAD, CHEST, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG
+    }
+
+    class Backpack {
+        +List~Weapon~ weapons
+        +List~Armor~ armors
+        +List~Consumable~ consumables
+        +float baseReductionFactor
+        +int upgradeLevel
+        +float getWeightReduction()
+        +void upgrade()
+        +float getTotalWeight()
+        +addItem(Item item)
+        +removeItem(Item item)
+    }
+
+    class Consumable {
+        +string id
+        +string name
+        +float weight
+        +List~StatusEffect~ effects
+        +use(Character target)
+    }
+
+    %% ==================== 战斗系统 ====================
+    class Battle {
+        +Character player
+        +List~Enemy~ enemies
+        +GridMap grid
+        +ActionBar actionBar
+        +int currentTurn
+        +int totalRounds
+        +List~StatusEffect~ activeFloorModifiers
+        +startBattle()
+        +endBattle()
+        +checkVictory()
+        +checkEscape()
+        +applyFloorModifiers()
+    }
+
+    class GridMap {
+        +int width
+        +int height
+        +Dictionary~Position,Unit~ units
+        +getDistance(Position a, Position b)
+        +isValidMove(Unit u, Position target)
+        +moveUnit(Unit u, Position target)
+    }
+
+    class Unit {
+        <<abstract>>
+        +Position pos
+        +int health
+        +int maxHealth
+        +int agility
+        +Weapon weapon
+        +Status[] statuses
+        +float actionBarProgress
+        +int getMoveRange()
+        +float getSpeed()
+        +void act(Action action)
+        +int getSkillValue(WeaponType type)
+        +int getCurrentWeaponSkill()
+    }
+
+    class Action {
+        <<interface>>
+        +int actionPointCost
+        +execute()
+    }
+
+    class AttackAction {
+        +Unit target
+        +BodyPart targetPart
+        +bool isVitalPart
+        +execute()
+        +bool calculateMiss(Unit attacker, Unit defender)
+        +bool calculateHitPart(Unit attacker, Unit defender, BodyPart part)
+        +void applyDamage()
+    }
+
+    class MoveAction {
+        +Position targetPos
+        +List~Position~ previewPath
+        +void showPreview()
+        +execute()
+    }
+
+    class DefendAction {
+        +execute()
+    }
+
+    class UseItemAction {
+        +Consumable item
+        +execute()
+    }
+
+    class SwitchWeaponAction {
+        +Weapon newWeapon
+        +execute()
+    }
+
+    class WaitAction {
+        +execute()
+    }
+
+    class DiscardItemAction {
+        +Item item
+        +execute()
+    }
+
+    class EscapeAction {
+        +execute()
+    }
+
+    class ActionBar {
+        +float playerProgress
+        +float enemyProgress
+        +void tick()
+        +bool isPlayerTurn()
+        +void consumeAction(Unit unit, Action action)
+        +void recalcTurnOrder()
+    }
+
+    class BodyPart {
+        +string name
+        +float healthRatio
+        +int currentHealth
+        +Armor armor
+        +bool isDisabled
+        +void init(Unit owner)
+        +takeDamage(int dmg)
+        +applyDisability()
+        +float getHealthPercent()
+    }
+
+    class Enemy {
+        +string name
+        +int strength, constitution
+        +Dictionary~WeaponType,Skill~ skills
+        +Weapon weapon
+        +Armor[] armors
+        +BodyPart[] bodyParts
+        +AIBehavior ai
+        +act()
+        +int getSkillValue(WeaponType type)
+        +static Enemy fromTemplate(EnemyTemplate template)
+    }
+
+    class EnemyTemplate {
+        +string id
+        +string name
+        +int strength, agility, constitution
+        +string weaponId
+        +List~string~ armorIds
+        +Dictionary~WeaponType,int~ initialSkillValues
+        +string aiType
+        +Enemy createEnemy()
+    }
+
+    class AIBehavior {
+        <<interface>>
+        +Action chooseAction(Battle context, Enemy self)
+    }
+
+    class AdvancedAI {
+        -float aggression
+        -float defenseTendency
+        +Action chooseAction(Battle context, Enemy self)
+    }
+
+    %% ==================== 状态系统 ====================
+    class Status {
+        +string id, name, description
+        +int duration
+        +List~StatusEffect~ effects
+        +onTurnStart(Unit u)
+        +onTurnEnd(Unit u)
+        +onDamageDealt(Unit u, Damage d)
+    }
+
+    class StatusEffect {
+        +EffectType type
+        +float value
+        +bool isPercentage
+        +string targetTag
+    }
+
+    class EffectType {
+        <<enum>>
+        STRENGTH_MOD, AGILITY_MOD, CONSTITUTION_MOD, SKILL_MOD,
+        DOT_HP, ACTION_SPEED_MOD, ARMOR_COVERAGE_MOD, ARMOR_DEFENSE_MOD,
+        DAMAGE_MOD, PENETRATION_MOD, MOVE_DISTANCE_MOD, STUN, SILENCE, BLIND
+    }
+
+    %% ==================== 地牢与进程 ====================
+    class DungeonFloor {
+        +int floorNumber
+        +Node[] nodes
+        +Node startNode
+        +Node bossNode
+        +List~StatusEffect~ floorModifiers
+        +generateMap()
+    }
+
+    class Node {
+        <<abstract>>
+        +string id
+        +NodeType type
+        +Node[] neighbors
+        +bool visited
+        +bool isHidden
+        +enter(Character c)
+    }
+
+    class NodeType {
+        <<enum>>
+        NORMAL_BATTLE, ELITE_BATTLE, BOSS, SHOP, EVENT, REST, CHEST
+    }
+
+    class BattleNode {
+        +Enemy[] enemies
+        +onClear(Battle battle)
+        -List~Item~ applyDamageToLoot(List~Item~ loot, int totalRounds)
+    }
+
+    class ShopNode {
+        +Item[] itemsForSale
+        +Item[] rareItemsForSale
+        +buy(Item item)
+    }
+
+    class EventNode {
+        +EventData eventData
+        +trigger()
+    }
+
+    class RestNode {
+        +healOption()
+        +removeStatusOption()
+    }
+
+    class ChestNode {
+        +Item[] loot
+        +bool isTrapped
+        +open()
+    }
+
+    class EventData {
+        +string title
+        +string description
+        +List~EventOption~ options
+    }
+
+    class EventOption {
+        +string text
+        +Condition condition
+        +List~Effect~ effects
+    }
+
+    class Condition {
+        +ConditionType type
+        +int value
+        +string extra
+    }
+
+    class ConditionType {
+        <<enum>>
+        HAS_STATUS, HEALTH_ABOVE, HEALTH_BELOW, HAS_ITEM, STAT_ABOVE, FLOOR_ABOVE, RANDOM
+    }
+
+    class Effect {
+        +EffectType type
+        +int value
+        +string target
+    }
+
+    class PostBattleReward {
+        +RewardType type
+        +AttributeType attribute
+        +WeaponType weaponType
+        +int healAmount
+        +Equipment targetEquipment
+        +WeaponUpgradeType weaponUpgrade
+        +ArmorUpgradeType armorUpgrade
+    }
+
+    class RewardType {
+        <<enum>>
+        ATTRIBUTE, HEAL, EQUIPMENT
+    }
+
+    class WeaponUpgradeType {
+        <<enum>>
+        ATTACK, PENETRATION_POWER, PENETRATION_RATE, RANGE
+    }
+
+    class ArmorUpgradeType {
+        <<enum>>
+        DEFENSE, COVERAGE
+    }
+
+    %% ==================== UI / 辅助系统 ====================
+    class MiniMap {
+        +GridMap grid
+        +void render()
+        +void centerOn(Unit u)
+    }
+
+    class LocalizationManager {
+        -string currentLanguage
+        -Dictionary~string,string~ strings
+        +static LocalizationManager getInstance()
+        +string get(string key)
+        +void loadLanguage(string lang)
+    }
+
+    class ConfigLoader {
+        +static ConfigLoader instance
+        +List~Weapon~ weapons
+        +List~Armor~ armors
+        +List~EnemyTemplate~ enemyTemplates
+        +List~EventData~ eventTemplates
+        +void loadAll()
+    }
+
+    %% ==================== 继承关系 ====================
+    Unit <|-- Character
+    Unit <|-- Enemy
+    Action <|-- AttackAction
+    Action <|-- MoveAction
+    Action <|-- DefendAction
+    Action <|-- UseItemAction
+    Action <|-- SwitchWeaponAction
+    Action <|-- WaitAction
+    Action <|-- DiscardItemAction
+    Action <|-- EscapeAction
+    Node <|-- BattleNode
+    Node <|-- ShopNode
+    Node <|-- EventNode
+    Node <|-- RestNode
+    Node <|-- ChestNode
+    WeaponSpecialAbility <|.. DualWieldAbility
+    WeaponSpecialAbility <|.. SpearPenetrateAbility
+    WeaponSpecialAbility <|.. HammerSmashAbility
+    AIBehavior <|.. AdvancedAI
+
+    %% ==================== 组合关系 ====================
+    Battle *-- Enemy
+    Battle *-- GridMap
+    Battle *-- ActionBar
+    Unit *-- BodyPart
+    DungeonFloor *-- Node
+    DungeonFloor *-- StatusEffect : floorModifiers
+    Status *-- StatusEffect
+    Character *-- Skill
+    Character *-- Backpack
+    Backpack *-- Weapon
+    Backpack *-- Armor
+    Backpack *-- Consumable
+    EventNode *-- EventData
+    EventData *-- EventOption
+    EventOption *-- Condition
+    EventOption *-- Effect
+
+    %% ==================== 聚合关系 ====================
+    Battle o-- Character
+    Character o-- Weapon
+    Character o-- Armor
+    BodyPart o-- Armor
+    Enemy o-- AIBehavior
+    Battle o-- MiniMap
+    ConfigLoader o-- EnemyTemplate : loads
+
+    %% ==================== 单向关联 ====================
+    Skill --> WeaponType
+    Weapon --> WeaponType
+    Weapon --> WeaponSpecialAbility
+    Weapon --> WeaponUpgradeType
+    Armor --> ArmorUpgradeType
+    AttackAction --> BodyPart
+    AttackAction --> Unit : defender
+    ActionBar --> Unit
+    Unit --> Weapon
+    Unit --> Status
+    BattleNode --> Battle
+    ShopNode --> Consumable
+    ChestNode --> Consumable
+    Character --> Status
+    Enemy --> Status
+    PostBattleReward --> AttributeType
+    PostBattleReward --> WeaponUpgradeType
+    PostBattleReward --> ArmorUpgradeType
+    PostBattleReward --> WeaponType
+    Character --> LocalizationManager
+    MiniMap --> GridMap
+    ConfigLoader --> Weapon
+    ConfigLoader --> Armor
+    ConfigLoader --> EventData
+    Enemy --> EnemyTemplate : created from
+    Condition --> ConditionType

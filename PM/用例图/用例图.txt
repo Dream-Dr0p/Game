@@ -1,0 +1,35 @@
+flowchart TD
+    subgraph 玩家
+        P[玩家]
+    end
+
+    subgraph 游戏系统
+        UC1[创建角色]
+        UC2[选择初始装备]
+        UC3[选择已有角色]
+        UC4[查看地牢地图]
+        UC5[进入战斗]
+        UC6[移动/攻击/使用道具]
+        UC7[选择战斗后奖励]
+        UC8[查看背包]
+        UC9[管理装备]
+        UC10[死亡后永久成长]
+        UC11[多角色独立存档]
+    end
+
+    P --> UC1
+    P --> UC2
+    P --> UC3
+    P --> UC4
+    P --> UC5
+    P --> UC6
+    P --> UC7
+    P --> UC8
+    P --> UC9
+    P --> UC10
+    P --> UC11
+
+    UC5 --> UC6
+    UC5 --> UC7
+    UC8 --> UC9
+    UC10 --> UC1
