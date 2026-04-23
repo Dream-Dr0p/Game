@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant 战斗 as Battle
+    participant 战斗节点 as BattleNode
+    participant 玩家 as Player
+    participant 战利品 as Loot
+    participant 奖励界面 as PostBattleRewardUI
+    participant 角色 as Character
+
+    战斗->>战斗节点: onClear()
+    战斗节点->>战斗: 获取总回合数(totalRounds)
+    战斗节点->>战利品: 应用损坏概率(每回合+5%，上限80%)
+    战利品-->>战斗节点: 过滤后的物品列表
+    战斗节点->>玩家: 弹出三选一奖励界面
+    玩家->>奖励界面: 选择奖励类型
+    alt 属性强化
+        奖励界面->>角色: increaseAttribute(力量/敏捷/体质/WEAPON_SKILL)
+        角色->>角色: 本次冒险属性+1
+    else 恢复
+        奖励界面->>角色: 恢复30%最大生命 或 移除负面状态
+        角色->>角色: 生命值增加 或 清除Status
+    else 装备强化
+        奖励界面->>角色: 选择一件武器/护甲
+        奖励界面->>角色: 升级指定属性(攻击+2/防御+1/覆盖率+5%)
+        角色->>角色: 更新装备属性，upgradeCount++
+    end
+    奖励界面-->>玩家: 显示生效结果
+    玩家->>战斗节点: 确认
+    战斗节点->>玩家: 返回地牢地图

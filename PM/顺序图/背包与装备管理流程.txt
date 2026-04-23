@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant 玩家 as Player
+    participant 背包界面 as BackpackUI
+    participant 背包 as Backpack
+    participant 角色 as Character
+    participant 行动条 as ActionBar
+
+    玩家->>背包界面: 打开背包
+    背包界面->>背包: 获取物品列表(武器/护甲/消耗品)
+    背包-->>背包界面: 返回列表
+    背包界面->>背包: 计算总重量+减免后重量
+    背包-->>背包界面: 显示重量与速度惩罚
+
+    alt 更换武器
+        玩家->>背包界面: 选择新武器
+        背包界面->>角色: equipWeapon(newWeapon)
+        角色->>角色: 旧武器放入背包
+        角色-->>背包界面: 装备更新
+        背包界面->>行动条: 触发速度重算(因武器重量变化)
+        行动条->>行动条: recalcTurnOrder()
+    else 更换护甲
+        玩家->>背包界面: 选择护甲及部位
+        背包界面->>角色: equipArmor(armor, slot)
+        角色->>角色: 旧护甲放入背包
+        角色-->>背包界面: 装备更新
+    else 使用消耗品
+        玩家->>背包界面: 使用道具
+        背包界面->>角色: 调用consumable.use()
+        角色->>角色: 应用效果(治疗/移除状态/永久属性)
+        背包界面->>背包: 移除消耗品
+    else 丢弃物品
+        玩家->>背包界面: 选择物品丢弃
+        背包界面->>角色: 消耗20%行动条(若在战斗中)
+        角色->>行动条: consumeAction(丢弃)
+        背包界面->>背包: removeItem(item)
+    end
+
+    背包界面->>背包: 重新计算总重量
+    背包-->>背包界面: 更新速度惩罚提示
+    背包界面-->>玩家: 刷新界面

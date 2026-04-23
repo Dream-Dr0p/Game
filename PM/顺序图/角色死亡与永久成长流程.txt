@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant 玩家 as Player
+    participant 战斗 as Battle
+    participant 角色 as Character
+    participant 存档 as SaveData
+    participant 成长计算 as PermanentGrowth
+
+    玩家->>战斗: 战斗中生命归零
+    战斗->>角色: die()
+    角色->>角色: 记录死亡时最终属性
+    角色-->>战斗: 死亡事件
+    战斗->>玩家: 显示死亡总结界面
+    玩家->>成长计算: 触发永久成长
+    成长计算->>角色: 获取冒险开始属性快照(adventureStartAttributes)
+    成长计算->>角色: 获取死亡时最终属性
+    成长计算->>成长计算: 计算差值(最终-初始)
+    成长计算->>成长计算: 应用衰减曲线(每10点系数0.5->0.25->...)
+    成长计算->>角色: 更新永久属性(力量/敏捷/体质/技艺)
+    角色->>存档: 保存永久属性
+    存档-->>成长计算: 保存完成
+    成长计算-->>玩家: 显示提升明细
+    玩家->>玩家: 返回主菜单

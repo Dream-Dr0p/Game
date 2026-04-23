@@ -1,0 +1,37 @@
+sequenceDiagram
+    participant 战斗 as Battle
+    participant 行动条 as ActionBar
+    participant 玩家角色 as Character
+    participant 敌人 as Enemy
+    participant 行动 as Action
+
+    战斗->>行动条: startBattle()
+    行动条->>玩家角色: 获取速度(敏捷-负重惩罚+状态)
+    玩家角色-->>行动条: speed值
+    行动条->>敌人: 获取速度
+    敌人-->>行动条: speed值
+    行动条->>行动条: 初始化进度(通常设为0~100随机偏移)
+    行动条->>行动条: recalcTurnOrder() 根据速度排序
+
+    loop 每回合
+        行动条->>行动条: tick() 增加所有单位进度(速度系数)
+        行动条->>行动条: 检查是否有单位进度≥100%
+        alt 玩家回合
+            行动条-->>玩家角色: isPlayerTurn()=true
+            玩家角色->>行动条: 选择行动(攻击/移动/防御/换武器等)
+            行动条->>行动: 创建具体Action对象
+            行动->>行动条: 获取actionPointCost
+            行动条->>行动条: consumeAction(unit, action) 扣除进度
+            行动->>行动: execute() 执行具体逻辑
+            行动-->>行动条: 执行完成
+        else 敌人回合
+            行动条-->>敌人: isPlayerTurn()=false
+            敌人->>敌人: AI.chooseAction()
+            敌人->>行动条: 选择行动
+            行动条->>行动条: consumeAction(敌人, action)
+            行动->>行动: execute()
+            行动-->>行动条: 完成
+        end
+        行动条->>行动条: 检查战斗结束条件(全灭/逃跑)
+        行动条-->>战斗: 战斗继续或结束
+    end

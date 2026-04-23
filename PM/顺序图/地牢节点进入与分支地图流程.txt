@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant 玩家 as Player
+    participant 地图界面 as MapUI
+    participant 地牢层 as DungeonFloor
+    participant 节点 as Node
+    participant 战斗节点 as BattleNode
+    participant 商店节点 as ShopNode
+    participant 事件节点 as EventNode
+    participant 角色 as Character
+
+    玩家->>地图界面: 点击相邻节点
+    地图界面->>地牢层: 获取节点邻居关系
+    地牢层-->>地图界面: 确认可进入
+    地图界面->>节点: enter(Character)
+    alt 战斗节点
+        节点->>战斗节点: 创建Battle场景
+        战斗节点->>角色: 开始战斗
+        战斗节点-->>地图界面: 战斗结束(胜利/逃跑)
+    else 商店节点
+        节点->>商店节点: 打开商店UI
+        商店节点->>角色: 展示物品列表(含稀有商品)
+        玩家->>商店节点: 购买物品
+        商店节点->>角色: 扣除货币，添加物品
+    else 事件节点
+        节点->>事件节点: 触发事件(EventData)
+        事件节点->>玩家: 显示事件描述与选项
+        玩家->>事件节点: 选择选项
+        事件节点->>事件节点: 检查Condition
+        事件节点->>角色: 应用Effects
+    else 休息节点
+        节点->>角色: 提供恢复/移除状态选项
+        玩家->>节点: 选择操作
+        节点->>角色: 恢复生命或移除负面状态
+    else 宝箱节点
+        节点->>角色: 打开宝箱，获得loot
+        节点->>节点: 判定陷阱(极小概率)
+        节点->>角色: 应用陷阱效果(如有)
+    end
+    节点->>地牢层: 标记visited=true
+    地牢层-->>地图界面: 更新节点状态
+    地图界面->>玩家: 刷新地图显示

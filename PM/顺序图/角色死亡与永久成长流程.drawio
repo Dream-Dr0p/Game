@@ -1,0 +1,134 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="第 1 页" id="wTtIP3HoLLN7Kq9W_oGH">
+    <mxGraphModel dx="1699" dy="909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-114" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Player" vertex="1">
+          <mxGeometry height="1076" width="150" x="110" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-115" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Battle" vertex="1">
+          <mxGeometry height="1076" width="150" x="310" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-116" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Character" vertex="1">
+          <mxGeometry height="1076" width="150" x="510" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-117" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="SaveData" vertex="1">
+          <mxGeometry height="1076" width="150" x="710" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-118" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PermanentGrowth" vertex="1">
+          <mxGeometry height="1076" width="158" x="910" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-119" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-114" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-115" value="战斗中生命归零">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="294" y="917" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-120" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-115" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-116" value="die()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="494" y="973" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-121" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-116" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-116" value="记录死亡时最终属性">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="636" y="1025" />
+              <mxPoint x="636" y="1055" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-122" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-116" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-115" value="死亡事件">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="497" y="1107" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-123" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-115" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-114" value="显示死亡总结界面">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="297" y="1159" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-124" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-114" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-118" value="触发永久成长">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="596" y="1211" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-125" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-116" value="获取冒险开始属性快照(adventureStartAttributes)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="799" y="1267" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-126" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-116" value="获取死亡时最终属性">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="799" y="1319" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-127" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-118" value="计算差值(最终-初始)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="1371" />
+              <mxPoint x="1040" y="1401" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-128" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-118" value="应用衰减曲线(每10点系数0.5-&gt;0.25-&gt;...)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="1457" />
+              <mxPoint x="1040" y="1487" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-129" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-116" value="更新永久属性(力量/敏捷/体质/技艺)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="799" y="1543" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-130" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-116" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-117" value="保存永久属性">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="694" y="1595" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-131" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-117" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-118" value="保存完成">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="896" y="1647" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-132" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-118" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-114" value="显示提升明细">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="599" y="1699" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-133" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-114" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-114" value="返回主菜单">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="236" y="1751" />
+              <mxPoint x="236" y="1781" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

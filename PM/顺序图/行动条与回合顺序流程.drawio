@@ -1,0 +1,218 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="第 1 页" id="wTtIP3HoLLN7Kq9W_oGH">
+    <mxGraphModel dx="1699" dy="909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-235" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Battle" vertex="1">
+          <mxGeometry height="1940" width="150" x="20" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-236" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ActionBar" vertex="1">
+          <mxGeometry height="1940" width="150" x="220" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-237" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Character" vertex="1">
+          <mxGeometry height="1940" width="150" x="544" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-238" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Enemy" vertex="1">
+          <mxGeometry height="1940" width="150" x="744" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-239" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Action" vertex="1">
+          <mxGeometry height="1940" width="150" x="944" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-240" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="alt" vertex="1">
+          <mxGeometry height="962" width="968" x="147" y="1225" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-241" parent="rCRDyfCI93o3TGu8r6VN-240" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[玩家回合]" vertex="1">
+          <mxGeometry height="20" width="938" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-242" parent="rCRDyfCI93o3TGu8r6VN-240" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="[敌人回合]" vertex="1">
+          <mxGeometry height="3" width="968" y="501" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-243" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=40;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="loop" vertex="1">
+          <mxGeometry height="1330" width="1040" x="84" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-244" parent="rCRDyfCI93o3TGu8r6VN-243" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[每回合]" vertex="1">
+          <mxGeometry height="20" width="1000" x="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-245" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-235" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="startBattle()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="204" y="601" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-246" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-237" value="获取速度(敏捷-负重惩罚+状态)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="466" y="653" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-247" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-237" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="speed值">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="469" y="709" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-248" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-238" value="获取速度">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="566" y="761" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-249" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-238" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="speed值">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="569" y="817" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-250" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="初始化进度(通常设为0~100随机偏移)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="869" />
+              <mxPoint x="346" y="899" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-251" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="recalcTurnOrder() 根据速度排序">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="955" />
+              <mxPoint x="346" y="985" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-252" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="tick() 增加所有单位进度(速度系数)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="1089" />
+              <mxPoint x="346" y="1119" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-253" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="检查是否有单位进度≥100%">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="1175" />
+              <mxPoint x="346" y="1205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-254" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-237" value="isPlayerTurn()=true">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="466" y="1309" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-255" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-237" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="选择行动(攻击/移动/防御/换武器等)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="469" y="1365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-256" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-239" value="创建具体Action对象">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="666" y="1421" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-257" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-239" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="获取actionPointCost">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="669" y="1477" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-258" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="consumeAction(unit, action) 扣除进度">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="1533" />
+              <mxPoint x="346" y="1563" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-259" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-239" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-239" value="execute() 执行具体逻辑">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1070" y="1619" />
+              <mxPoint x="1070" y="1649" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-260" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-239" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="执行完成">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="669" y="1701" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-261" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-238" value="isPlayerTurn()=false">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="566" y="1805" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-262" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-238" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-238" value="AI.chooseAction()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="1861" />
+              <mxPoint x="870" y="1891" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-263" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-238" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="选择行动">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="569" y="1943" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-264" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="consumeAction(敌人, action)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="1999" />
+              <mxPoint x="346" y="2029" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-265" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-239" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-239" value="execute()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1070" y="2085" />
+              <mxPoint x="1070" y="2115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-266" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-239" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-236" value="完成">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="669" y="2167" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-267" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="curved=1;endArrow=block;rounded=0;" target="rCRDyfCI93o3TGu8r6VN-236" value="检查战斗结束条件(全灭/逃跑)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="2233" />
+              <mxPoint x="346" y="2263" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rCRDyfCI93o3TGu8r6VN-268" edge="1" parent="1" source="rCRDyfCI93o3TGu8r6VN-236" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="rCRDyfCI93o3TGu8r6VN-235" value="战斗继续或结束">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="207" y="2315" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
