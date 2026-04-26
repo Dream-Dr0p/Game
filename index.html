@@ -2,84 +2,116 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>肉鸽回合制地牢闯关</title>
-    <style>
-        * { box-sizing: border-box; user-select: none; }
-        body {
-            background: #1a1a2e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: system-ui, 'Segoe UI', monospace;
-        }
-        #game-container {
-            width: 1200px;
-            height: 800px;
-            background: #0f0f1a;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        canvas {
-            display: block;
-            background: #2a2a3a;
-            cursor: crosshair;
-        }
-        .ui-panel {
-            background: #1e1e2a;
-            color: #eee;
-            padding: 8px 16px;
-            display: flex;
-            gap: 20px;
-            border-top: 1px solid #3a3a4a;
-        }
-        button {
-            background: #3a3a5a;
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover { background: #5a5a7a; }
-        #log {
-            flex: 1;
-            font-size: 12px;
-            overflow-y: auto;
-            height: 100px;
-            background: #0a0a10;
-            padding: 4px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>⚔️ ！死战不退！ ⚔️</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="game-container">
-    <canvas id="game-canvas" width="1200" height="600"></canvas>
-    <div class="ui-panel">
-        <div>❤️ <span id="hp">0</span> / <span id="maxHp">0</span></div>
-        <div>⚔️ <span id="atk">0</span></div>
-        <div>🏃 <span id="speed">0</span></div>
-        <div>🎒负重: <span id="weight">0</span>%</div>
-        <button id="btn-backpack">📦 背包</button>
-        <button id="btn-end-turn">⏩ 结束回合</button>
-        <div id="log"></div>
+    <div id="game-container">
+        <!-- 主菜单界面 -->
+        <div id="main-menu" class="screen active">
+            <h1>⚔️ ！死战不退！ ⚔️</h1>
+            <div class="menu-buttons">
+                <button id="btn-new-game">✨ 新游戏</button>
+                <button id="btn-load-game">📂 加载角色</button>
+            </div>
+            <div id="character-list" class="character-list hidden"></div>
+        </div>
+
+        <!-- 角色创建界面 -->
+        <div id="create-screen" class="screen">
+            <h2>创建冒险者</h2>
+            <input type="text" id="char-name" placeholder="角色名" maxlength="12">
+            <div class="equipment-select">
+                <h3>选择初始装备（任意两件）</h3>
+                <div id="weapon-list" class="item-grid"></div>
+                <div id="armor-list" class="item-grid"></div>
+                <div class="selected-info">已选: <span id="selected-count">0</span>/2</div>
+                <button id="confirm-creation" disabled>开始冒险</button>
+                <div class="menu-buttons" style="margin-top: 20px;">
+                <button id="exit-to-main-from-create">🏠 退出至主页面</button></div>
+            </div>
+        </div>
+
+        <!-- 地牢地图界面 -->
+        <div id="map-screen" class="screen">
+            <div class="map-header">
+                <span>第 <span id="floor-num">1</span> 层</span>
+                <button id="btn-backpack">🎒 背包</button>
+                <button id="exit-to-main-from-map">🏠 退出</button>
+            </div>
+            <div id="map-canvas-container">
+                <canvas id="map-canvas" width="800" height="500"></canvas>
+            </div>
+            <div class="map-footer">
+                <span id="selected-node-info">点击节点选择</span>
+            </div>
+        </div>
+
+        <!-- 战斗界面 -->
+        <div id="battle-screen" class="screen">
+            <!-- 新增信息栏（不干扰画布） -->
+        <div id="battle-info-panel" style="display: flex; justify-content: space-between; 
+        background: #1e1f2c; padding: 8px 16px; border-radius: 12px; margin-bottom: 8px;">
+            <span>⚔️ 回合: <span id="battle-round">1</span></span>
+            <span>⚡ 行动点: <span id="battle-ap">100</span>%</span>
+            <span>🚶 剩余步数: <span id="battle-steps">5</span></span>
+        </div>
+            <canvas id="battle-canvas" width="900" height="500"></canvas>
+            <div class="battle-controls">
+                <button id="btn-attack">⚔️ 攻击</button>
+                <button id="btn-defend">🛡️ 防御</button>
+                
+                <button id="btn-switch-weapon">🔁 换武器</button>
+             
+                <button id="btn-escape">🏃 逃跑</button>
+            </div>
+            <div id="battle-log" class="battle-log"></div>
+            <div id="body-part-select" class="body-part-select hidden">
+                <h4>选择攻击部位</h4>
+                <div class="part-buttons"></div>
+            </div>
+        </div>
+
+        <!-- 背包弹窗 -->
+        <div id="backpack-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>背包</h3>
+                <div class="backpack-stats">重量: <span id="backpack-weight">0</span> (速度惩罚: <span id="speed-penalty">0%</span>)</div>
+                <div class="backpack-tabs">
+                    <button class="tab-btn active" data-tab="weapons">武器</button>
+                    <button class="tab-btn" data-tab="armors">护甲</button>
+                    <button class="tab-btn" data-tab="consumables">消耗品</button>
+                </div>
+                <div id="backpack-items" class="backpack-items"></div>
+                <div class="equipped-gear">
+                    <h4>当前装备</h4>
+                    <div id="equipped-weapon"></div>
+                    <div id="equipped-armors"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 战斗后奖励界面 -->
+        <div id="reward-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>战斗胜利！</h3>
+                <div class="reward-options" id="reward-options"></div>
+            </div>
+        </div>
+
+        <!-- 死亡总结界面 -->
+        <div id="death-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>💀 角色死亡 💀</h3>
+                <div id="death-stats"></div>
+                <div id="permanent-growth"></div>
+                <button id="death-ok">返回主菜单</button>
+            </div>
+        </div>
     </div>
-</div>
-<script type="importmap">
-    {
-        "imports": {
-            "#core/*": "./src/core/*.js",
-            "#equipment/*": "./src/equipment/*.js",
-            "#battle/*": "./src/battle/*.js",
-            "#dungeon/*": "./src/dungeon/*.js",
-            "#status/*": "./src/status/*.js",
-            "#enums/*": "./src/enums/*.js"
-        }
-    }
-</script>
-<script type="module" src="./src/main.js"></script>
+
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
