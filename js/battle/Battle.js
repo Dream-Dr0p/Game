@@ -1,4 +1,14 @@
 import { GridMap } from './GridMap.js';
+import {BodyPartSlot} from '../enums/BodyPartSlot.js'
+
+const partNameMap = {
+    [BodyPartSlot.HEAD]: '头部',
+    [BodyPartSlot.CHEST]: '躯干',
+    [BodyPartSlot.LEFT_ARM]: '左臂',
+    [BodyPartSlot.RIGHT_ARM]: '右臂',
+    [BodyPartSlot.LEFT_LEG]: '左腿',
+    [BodyPartSlot.RIGHT_LEG]: '右腿'
+};
 
 export class Battle {
     constructor(player, enemies) {
@@ -47,8 +57,8 @@ export class Battle {
     startEnemyTurn() {
         if (this.ended) return;
         this.currentTurn = 'enemy';
-        this.currentEnemyIndex = 0;
-        // 为每个活着的敌人重置行动点
+        this.currentEnemyIdx = 0;  // 新增成员变量
+        // 重置所有活着的敌人的行动点
         for (let e of this.enemies) {
             if (e.isAlive()) e.actionPoints = 100;
         }
@@ -59,57 +69,60 @@ export class Battle {
 
     processEnemyTurn() {
         if (this.ended || this.currentTurn !== 'enemy') return;
-        const aliveEnemies = this.enemies.filter(e => e.isAlive());
-        if (aliveEnemies.length === 0) {
-            this.checkEnd();
-            return;
-        }
-        if (this.currentEnemyIndex >= aliveEnemies.length) {
-            // 所有敌人都行动完毕，结束敌人回合
+
+        // 实时获取活着的敌人列表（必须在任何使用前定义）
+        const alive = this.enemies.filter(e => e.isAlive());
+        if (alive.length === 0) {
             this.log(`敌人回合结束`);
             this.round++;
             this.startPlayerTurn();
             return;
         }
-        const enemy = aliveEnemies[this.currentEnemyIndex];
+        // 确保索引有效
+        if (this.currentEnemyIdx >= alive.length) {
+            this.log(`敌人回合结束`);
+            this.round++;
+            this.startPlayerTurn();
+            return;
+        }
+        const enemy = alive[this.currentEnemyIdx];
         let ap = enemy.actionPoints;
         const distance = this.grid.getDistance(enemy.pos, this.player.pos);
         const weaponRange = enemy.weapon ? enemy.weapon.range : 1;
         let actionTaken = false;
-        
-        if (distance <= weaponRange && this.enemyActionPoints >= this.getAttackCost(enemy.weapon)) {
-            const cost = this.getAttackCost(enemy.weapon);
+        const attackCost = this.getAttackCost(enemy);
+
+        if (distance <= weaponRange && ap >= attackCost) {
             const randomPart = this.player.bodyParts[Math.floor(Math.random() * this.player.bodyParts.length)].slot;
             this.attackAction(enemy, this.player, randomPart);
-            this.enemyActionPoints -= cost;
-            this.log(`${enemy.name} 攻击消耗 ${cost} 行动点，剩余 ${this.enemyActionPoints}`);
-            actionDone = true;
-        }else if (ap >= 20) {
-            // 尝试移动
+            ap -= attackCost;
+            actionTaken = true;
+            this.log(`${enemy.name} 攻击，消耗 ${attackCost} 行动点，剩余 ${ap}`);
+        } else if (ap >= 20) {
             const targetPos = this.grid.getCloserPosition(enemy.pos, this.player.pos, 1);
             if (targetPos.x !== enemy.pos.x || targetPos.y !== enemy.pos.y) {
                 this.grid.setUnit(enemy, targetPos.x, targetPos.y);
                 ap -= 20;
-                this.log(`${enemy.name} 移动了 1 格`);
-                window.dispatchEvent(new CustomEvent('battleUpdate'));
+                this.log(`${enemy.name} 移动了 1 格，剩余行动点 ${ap}`);
                 actionTaken = true;
+                window.dispatchEvent(new CustomEvent('battleUpdate'));
             } else {
                 ap = 0;
                 actionTaken = true;
             }
         }
-        
+
         if (!actionTaken) ap = 0;
         enemy.actionPoints = ap;
         window.dispatchEvent(new CustomEvent('battleUpdate'));
-        
-        if (enemy.actionPoints <= 0) {
-            // 当前敌人结束，移动到下一个
-            this.currentEnemyIndex++;
-            setTimeout(() => this.processEnemyTurn(), 50);
-        } else {
+
+        if (enemy.actionPoints > 0) {
             // 同一敌人继续行动
             setTimeout(() => this.processEnemyTurn(), 200);
+        } else {
+            // 当前敌人行动完毕，移到下一个
+            this.currentEnemyIdx++;
+            setTimeout(() => this.processEnemyTurn(), 50);
         }
     }
 
@@ -127,15 +140,15 @@ export class Battle {
         if (Math.random() > hitChance) {
             let rand = Math.floor(Math.random() * defender.bodyParts.length);
             targetPart = defender.bodyParts[rand];
-            this.log(`未击中指定部位，击中${targetPart.slot}`);
+            this.log(`未击中指定部位，击中${partNameMap[targetPart.slot] || targetPart.slot}`);
         }
         let baseDamage = (attacker.weapon?.attack || 8) + Math.floor(attacker.strength / 3);
         let penPow = attacker.weapon?.penetrationPower || 0;
         let penRate = attacker.weapon?.penetrationRate || 0.75;
         let { dmg, destroyed, covered } = targetPart.takeDamage(baseDamage, penPow, penRate);
         defender.health -= dmg;
-        this.log(`${attacker.name} 使用 ${attacker.weapon?.name || '徒手'} 对 ${defender.name} 的 ${targetPart.slot} 造成 ${dmg} 伤害${covered ? '(格挡)' : ''}`);
-        if (destroyed) this.log(`部位 ${targetPart.slot} 被破坏!`);
+        this.log(`${attacker.name} 使用 ${attacker.weapon?.name || '徒手'} 对 ${defender.name} 的 ${partNameMap[targetPart.slot] || targetPart.slot} 造成 ${dmg} 伤害...`);
+        if (destroyed) this.log(`部位 ${partNameMap[targetPart.slot] || targetPart.slot} 被破坏!`);
         if (Math.random() < aSkill / (aSkill + 100) * 0.3) {
             let extra = Math.floor(dmg * 0.5);
             defender.health -= extra;
@@ -145,7 +158,18 @@ export class Battle {
             let skill = attacker.skills.get(attacker.weapon.type);
             if (skill) skill.addExperience(1.0);
         }
+        if (defender === this.player && !defender.isAlive()) {
+            this.endBattle(false);
+            return;
+        }
+        if (!defender.isAlive() && defender !== this.player) {
+            const index = this.enemies.indexOf(defender);
+            if (index !== -1) {
+                this.log(`${defender.name} 被击败`);
+            }
+        }
         window.dispatchEvent(new CustomEvent('battleUpdate'));
+        this.checkEnd();
     }
 
     playerAction(action) {
@@ -213,9 +237,25 @@ export class Battle {
         window.dispatchEvent(new CustomEvent('battleLog', { detail: msg }));
     }
 	
-	getAttackCost(weapon) {
-        if (!weapon) return 10; // 徒手
-        let cost = 10 + weapon.weight * 5;
+	getAttackCost(unit) {
+        const weapon = unit.weapon;
+        if (!weapon) return 30; // 徒手
+        let cost = 30 + weapon.weight * 5;
         return Math.min(80, Math.max(20, cost));
+    }
+
+    switchWeapon(newWeapon) {
+        if (this.currentTurn !== 'player') return;
+        const oldWeapon = this.player.weapon;
+        // 将旧武器放回背包
+        if (oldWeapon) {
+            this.player.backpack.weapons.push(oldWeapon);
+        }
+        // 从背包中移除新武器
+        const idx = this.player.backpack.weapons.findIndex(w => w.id === newWeapon.id);
+        if (idx !== -1) this.player.backpack.weapons.splice(idx, 1);
+        this.player.weapon = newWeapon;
+        this.log(`${this.player.name} 更换武器为 ${newWeapon.name}`);
+        window.dispatchEvent(new CustomEvent('battleUpdate'));
     }
 }

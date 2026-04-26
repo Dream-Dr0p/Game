@@ -1,9 +1,19 @@
 // js/ui/UIManager.js (完整版，默认点击移动/攻击，无需移动模式)
 import { Character } from '../core/Character.js';
-import { baseWeapons, Weapon } from '../equipment/Weapon.js';
+
 import { baseArmors, Armor } from '../equipment/Armor.js';
 import { DungeonFloor } from '../dungeon/DungeonFloor.js';
 import { NodeType } from '../enums/NodeType.js';
+import { Weapon, baseWeapons, FIST_WEAPON } from '../equipment/Weapon.js';
+import {BodyPartSlot} from '../enums/BodyPartSlot.js'
+const partNameMap = {
+    [BodyPartSlot.HEAD]: '头部',
+    [BodyPartSlot.CHEST]: '躯干',
+    [BodyPartSlot.LEFT_ARM]: '左臂',
+    [BodyPartSlot.RIGHT_ARM]: '右臂',
+    [BodyPartSlot.LEFT_LEG]: '左腿',
+    [BodyPartSlot.RIGHT_LEG]: '右腿'
+};
 
 export class UIManager {
     constructor() {
@@ -24,6 +34,7 @@ export class UIManager {
         this.drawMap();
         this.updatePlayerHpDisplay();   // 刷新地图时同步更新血量显示
     }
+
     showMessage(msg) { alert(msg); }
 
     initEventListeners() {
@@ -124,17 +135,6 @@ export class UIManager {
     
     this.updateSelectedCount();
     }
-
-    // selectEquipment(item, type) {
-    //     if (this.selectedEquipment.length >= 2) return;
-    //     this.selectedEquipment.push({ item, type });
-    //     const countSpan = document.getElementById('selected-count');
-    //     if (countSpan) countSpan.innerText = this.selectedEquipment.length;
-    //     if (this.selectedEquipment.length === 2) {
-    //         const confirmBtn = document.getElementById('confirm-creation');
-    //         if (confirmBtn) confirmBtn.disabled = false;
-    //     }
-    // }
 
     toggleEquipment(item, type, domElement) {
         // 查找是否已经选中
@@ -516,6 +516,7 @@ enterNodeDirectly(node) {
             }
         }
         for (let [key, unit] of grid.units.entries()) {
+            if (!unit.isAlive()) continue; // 跳过死亡单位
             const cx = unit.pos.x * cellW + cellW / 2;
             const cy = unit.pos.y * cellH + cellH / 2;
             const radius = Math.min(cellW, cellH) / 3;
@@ -625,7 +626,7 @@ enterNodeDirectly(node) {
         }
         const cost = battle.getAttackCost(battle.player.weapon);
         if (battle.playerActionPoints < cost) {
-            this.showMessage("行动点不足，需要 ${cost} 点");
+            this.showMessage(`行动点不足，需要 ${cost} 点`);
             return;
         }
         const partDiv = document.getElementById('body-part-select');
@@ -633,7 +634,8 @@ enterNodeDirectly(node) {
         partBtns.innerHTML = '';
         enemy.bodyParts.forEach(part => {
             const btn = document.createElement('button');
-            btn.innerText = part.slot;
+            const partName = partNameMap[part.slot] || part.slot;
+            btn.innerText = partName;
             btn.onclick = () => {
                 battle.playerAction({ type: 'attack', enemy: enemy, part: part.slot });
                 partDiv.classList.add('hidden');
@@ -718,12 +720,60 @@ enterNodeDirectly(node) {
     }
 
     switchWeapon() {
-        if (this.currentCharacter && this.currentCharacter.backpack.weapons.length > 0 && this.currentCharacter.backpack.weapons[0] !== this.currentCharacter.weapon) {
-            this.currentCharacter.equipWeapon(this.currentCharacter.backpack.weapons[0]);
-            alert(`装备 ${this.currentCharacter.weapon.name}`);
-        } else {
-            alert('没有可切换的武器');
+        const backpack = this.currentCharacter.backpack;
+        if (!backpack.weapons.length) {
+            this.showMessage("背包中没有其他武器");
+            return;
         }
+        // 创建武器选择面板
+        const modal = document.createElement('div');
+        modal.id = 'weapon-select-modal';
+        modal.style.position = 'fixed';
+        modal.style.backgroundColor = '#1e1f2c';
+        modal.style.border = '2px solid #ffd966';
+        modal.style.borderRadius = '16px';
+        modal.style.padding = '16px';
+        modal.style.zIndex = '300';
+        modal.style.top = '40%';
+        modal.style.left = '40%';
+        modal.style.transform = 'translate(-50%, -50%)';
+        modal.style.minWidth = '200px';
+        modal.style.textAlign = 'center';
+        modal.innerHTML = '<h4 style="margin:0 0 12px 0">⚔️ 选择武器 ⚔️</h4>';
+
+        backpack.weapons.forEach(weapon => {
+            const btn = document.createElement('button');
+            btn.innerText = `${weapon.name} (攻${weapon.attack} 重${weapon.weight})`;
+            btn.style.display = 'block';
+            btn.style.margin = '8px auto';
+            btn.style.width = '80%';
+            btn.onclick = () => {
+                if (this.pendingBattle && this.pendingBattle.currentTurn === 'player') {
+                    const cost = 5; // 换武器消耗20行动点
+                    if (this.pendingBattle.playerActionPoints >= cost) {
+                        this.pendingBattle.switchWeapon(weapon);
+                        this.pendingBattle.playerActionPoints -= cost;
+                        this.pendingBattle.log(`换武器消耗 ${cost} 行动点`);
+                        window.dispatchEvent(new CustomEvent('battleUpdate'));
+                    } else {
+                        this.showMessage(`行动点不足，需要 ${cost} 点`);
+                    }
+                } else {
+                    // 非战斗状态直接换
+                    this.currentCharacter.equipWeapon(weapon);
+                    this.updateCharacterStatsPanel();
+                    this.showMessage(`已装备 ${weapon.name}`);
+                }
+                modal.remove();
+            };
+            modal.appendChild(btn);
+        });
+        const cancelBtn = document.createElement('button');
+        cancelBtn.innerText = '取消';
+        cancelBtn.style.marginTop = '12px';
+        cancelBtn.onclick = () => modal.remove();
+        modal.appendChild(cancelBtn);
+        document.body.appendChild(modal);
     }
 
     showBackpack() {
@@ -751,14 +801,22 @@ enterNodeDirectly(node) {
         const optionsDiv = document.getElementById('reward-options');
         if (!modal || !optionsDiv) return;
         optionsDiv.innerHTML = '';
-        const rewards = ['属性+1 (力量)', '恢复30%生命', '武器攻击+2'];
+        const rewards = [
+            '💪 力量+1',
+            '🏃 敏捷+1',
+            '🛡️ 体质+1',
+            '❤️ 恢复30%生命',
+            '⚔️ 武器攻击+2'
+        ];
         rewards.forEach(r => {
             const btn = document.createElement('button');
             btn.innerText = r;
             btn.onclick = () => {
                 if (r.includes('力量')) this.currentCharacter.strength++;
                 if (r.includes('恢复')) {
-                    this.currentCharacter.health = Math.min(this.currentCharacter.maxHealth, this.currentCharacter.health + Math.floor(this.currentCharacter.maxHealth * 0.3));
+                    let healAmount = Math.floor(this.currentCharacter.maxHealth * 0.3);
+                    this.currentCharacter.health = Math.min(this.currentCharacter.maxHealth, this.currentCharacter.health + healAmount);
+                    console.log(`恢复前: ${this.currentCharacter.health - healAmount}, 恢复量: ${healAmount}, 恢复后: ${this.currentCharacter.health}`);
                 }
                 if (r.includes('武器攻击') && this.currentCharacter.weapon) this.currentCharacter.weapon.attack += 2;
                 modal.classList.add('hidden');
@@ -809,6 +867,7 @@ enterNodeDirectly(node) {
     }
 
     saveCharacter(char) {
+        // 保存当前武器（完整信息）
         const weaponData = char.weapon ? {
             id: char.weapon.id,
             name: char.weapon.name,
@@ -820,7 +879,20 @@ enterNodeDirectly(node) {
             weight: char.weapon.weight,
             upgradeCount: char.weapon.upgradeCount
         } : null;
-        
+
+        // 保存背包中的武器列表（每个武器的关键属性）
+        const backpackWeapons = char.backpack.weapons.map(w => ({
+            id: w.id,
+            name: w.name,
+            type: w.type,
+            attack: w.attack,
+            penetrationPower: w.penetrationPower,
+            penetrationRate: w.penetrationRate,
+            range: w.range,
+            weight: w.weight,
+            upgradeCount: w.upgradeCount
+        }));
+
         const data = {
             name: char.name,
             strength: char.strength,
@@ -829,8 +901,8 @@ enterNodeDirectly(node) {
             health: char.health,
             maxHealth: char.maxHealth,
             floor: char.floor || 1,
-            weapon: weaponData,   // 保存完整武器对象
-            // 可选的背包简化保存（后续可扩展）
+            weapon: weaponData,
+            backpackWeapons: backpackWeapons   // 新增
         };
         localStorage.setItem(`char_${char.name}`, JSON.stringify(data));
     }
@@ -849,9 +921,10 @@ enterNodeDirectly(node) {
                 card.className = 'character-card';
                 
                 // 构建详细信息HTML
+                const weaponName = data.weapon ? data.weapon.name : '徒手';
                 const infoHTML = `
                     <div style="font-weight:bold;">${data.name}</div>
-                    <div style="font-size:12px;">❤️ ${data.health}/${data.maxHealth} | ⚔️ ${data.weaponName || '徒手'}</div>
+                    <div style="font-size:12px;">❤️ ${data.health}/${data.maxHealth} | ⚔️ ${weaponName}</div>
                     <div style="font-size:10px;">💪 ${data.strength} | 🏃 ${data.agility} | 🛡️ ${data.constitution}</div>
                 `;
                 const infoDiv = document.createElement('div');
@@ -898,21 +971,33 @@ enterNodeDirectly(node) {
         char.health = data.health;
         char.maxHealth = data.maxHealth;
         char.floor = data.floor || 1;
-        
-        // 恢复武器
-        if (data.weapon) {
-            // 根据保存的数据重新创建武器实例
-            const restoredWeapon = new Weapon(data.weapon);
-            char.weapon = restoredWeapon;
-            // 可选：也把武器放入背包（避免丢失）
-            if (!char.backpack.weapons.find(w => w.id === restoredWeapon.id)) {
-                char.backpack.weapons.push(restoredWeapon);
+
+        // 恢复背包中的武器（从保存的原始数据重新构建 Weapon 对象）
+        if (data.backpackWeapons && Array.isArray(data.backpackWeapons)) {
+            char.backpack.weapons = data.backpackWeapons.map(wData => new Weapon(wData));
+        }
+
+        // 恢复当前武器
+        if (data.weapon && data.weapon.id) {
+            let currentWeapon = null;
+            // 先从背包中查找是否有相同 id 的武器（避免重复）
+            currentWeapon = char.backpack.weapons.find(w => w.id === data.weapon.id);
+            if (!currentWeapon) {
+                // 如果背包中没有，则根据保存的数据重新创建
+                currentWeapon = new Weapon(data.weapon);
+                char.backpack.weapons.push(currentWeapon);
             }
+            char.weapon = currentWeapon;
+            // 从背包中移除（因为已经装备了，但也可以保留备份，看设计）
+            // 这里不删除，因为通常装备武器后背包里应该还留一个？根据你的逻辑，装备时武器应该从背包移到装备栏。
+            // 为了保持一致性，建议将武器从背包中移除：
+            const idx = char.backpack.weapons.findIndex(w => w.id === currentWeapon.id);
+            if (idx !== -1) char.backpack.weapons.splice(idx, 1);
         } else {
-            // 没有武器数据，给徒手
+            // 没有武器，装备徒手
             char.weapon = FIST_WEAPON.clone();
         }
-        
+
         this.currentCharacter = char;
         this.startDungeon();
     }
@@ -979,6 +1064,7 @@ enterNodeDirectly(node) {
         const roundSpan = document.getElementById('battle-round');
         const apSpan = document.getElementById('battle-ap');
         const stepsSpan = document.getElementById('battle-steps');
+        const weaponSpan = document.getElementById('battle-weapon');
         if (roundSpan) roundSpan.innerText = battle.round;
         if (battle.currentTurn === 'player') {
             if (apSpan) apSpan.innerText = battle.playerActionPoints;
@@ -987,6 +1073,11 @@ enterNodeDirectly(node) {
         } else if (battle.currentTurn === 'enemy') {
             if (apSpan) apSpan.innerText = '--';
             if (stepsSpan) stepsSpan.innerText = '--';
+        }
+        // 显示当前武器名称（从 currentCharacter 获取）
+        if (this.currentCharacter && weaponSpan) {
+            const weaponName = this.currentCharacter.weapon ? this.currentCharacter.weapon.name : '徒手';
+            weaponSpan.innerText = weaponName;
         }
     }
 }
